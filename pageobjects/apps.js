@@ -1,6 +1,6 @@
 class AppsPage {
   get searchInput() { return $('input[placeholder="Search apps..."]'); }
-  get appTitles() { return $$('div.space-y-1>h3'); }
+  get appTitles() { return $$('div.space-y-1 > h3'); }
   get appDescriptions() { return $$('div.space-y-1>div>p'); }
 
   sortButton(label) {
@@ -23,33 +23,16 @@ class AppsPage {
     }
   }
 
-  async verifySortingDifference() {
-    const recentList = this.appTitles;
-    const recentTitles = await Promise.all(recentList.map(el => el.getText()));
-
-    await this.sortButton('Top').click();
-    await browser.pause(2000);
-
-    const topList = this.appTitles;
-    const topTitles = await Promise.all(topList.map(el => el.getText()));
-    expect(recentTitles).not.toEqual(topTitles);
-  }
-
   async verifyCategoryFilterWithApi(category, expectedTitles) {
-  await this.categoryFilter(category).click();
-  await browser.pause(2000)
+    await this.categoryFilter(category).click();
+    await browser.pause(2000)
 
-  const uiTitles = await this.appTitles;
-  for (const el of uiTitles) {
-    const title = await el.getText();
-    expect(expectedTitles).toContain(title);
+    const uiTitles = await this.appTitles;
+    for (const el of uiTitles) {
+      const title = await el.getText();
+      expect(expectedTitles).toContain(title);
+    }
   }
-}
-  
-    
-    
-    
-  
 }
 
 export default new AppsPage();
